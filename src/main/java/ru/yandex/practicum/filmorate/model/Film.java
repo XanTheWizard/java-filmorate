@@ -19,8 +19,7 @@ public class Film {
     public Film() {
     }
 
-    @NotNull
-    @NonNull private int id;
+    @NotNull @NonNull private int id;
     @NotNull
     @NonNull
     @NotBlank private String name;
