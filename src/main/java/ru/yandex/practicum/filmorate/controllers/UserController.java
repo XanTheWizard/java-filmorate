@@ -41,7 +41,7 @@ public class UserController {
         }
     }
 
-    @GetMapping("/getusers")
+    @GetMapping("/users")
     public List<User> getUsers() {
         return new ArrayList<User>(users.values());
     }

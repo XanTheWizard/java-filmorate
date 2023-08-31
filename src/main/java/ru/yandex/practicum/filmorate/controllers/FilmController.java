@@ -42,7 +42,7 @@ public class FilmController {
         }
     }
 
-    @GetMapping("/getfilms")
+    @GetMapping("/films")
     public List<Film> getFilms() {
         return new ArrayList<>(films.values());
     }
