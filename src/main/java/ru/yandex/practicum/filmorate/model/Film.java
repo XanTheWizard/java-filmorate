@@ -15,6 +15,7 @@ public class Film {
         this.description = description;
         this.releaseDate = releaseDate;
         this.duration = duration;
+
     }
 
     public Film() {
