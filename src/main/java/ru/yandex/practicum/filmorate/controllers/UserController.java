@@ -16,9 +16,10 @@ import java.util.List;
 public class UserController {
     private HashMap<Integer, User> users = new HashMap<>();
     private int id;
+
     @PostMapping(value = "/users")
     public User addUser(@Valid @RequestBody User user) {
-        if(!users.containsKey(user.getId())) {
+        if (!users.containsKey(user.getId())) {
             validateUser(user);
             ++id;
             user.setId(id);
