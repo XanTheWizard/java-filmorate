@@ -12,8 +12,6 @@ import ru.yandex.practicum.filmorate.model.User;
 
 import java.time.LocalDate;
 
-import static org.junit.Assert.assertNotNull;
-
 @SpringBootTest
 class FilmorateApplicationTests {
 
