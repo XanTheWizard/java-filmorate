@@ -37,7 +37,7 @@ class FilmorateApplicationTests {
 		UserController userController = new UserController();
 		User testUser = new User("zombiegmail.com", "Belch", "Bob", LocalDate.parse("2018-11-01"));
 		ValidationException ex = Assertions.assertThrows(ValidationException.class, () -> userController.addUser(testUser));
-		Assertions.assertEquals("Invalid data", ex.getMessage());
+		Assertions.assertEquals("Ќеверные данные: емаил должен включать символ @, логин должен быть без пробелов, вы пока что не можете родитьс€ в будущем", ex.getMessage());
 	}
 
 	@Test
@@ -45,7 +45,7 @@ class FilmorateApplicationTests {
 		UserController userController = new UserController();
 		User testUser = new User("zombie@gmail.com", "Bob Zombie", "Bob", LocalDate.parse("2018-11-01"));
 		ValidationException ex = Assertions.assertThrows(ValidationException.class, () -> userController.addUser(testUser));
-		Assertions.assertEquals("Invalid data", ex.getMessage());
+		Assertions.assertEquals("Ќеверные данные: емаил должен включать символ @, логин должен быть без пробелов, вы пока что не можете родитьс€ в будущем", ex.getMessage());
 	}
 
 	@Test
@@ -61,7 +61,7 @@ class FilmorateApplicationTests {
 		UserController userController = new UserController();
 		User testUser = new User("zombie@gmail.com", "Belch", "Bob", LocalDate.parse("2024-11-01"));
 		ValidationException ex = Assertions.assertThrows(ValidationException.class, () -> userController.addUser(testUser));
-		Assertions.assertEquals("Invalid data", ex.getMessage());
+		Assertions.assertEquals("Ќеверные данные: емаил должен включать символ @, логин должен быть без пробелов, вы пока что не можете родитьс€ в будущем", ex.getMessage());
 	}
 
 	@Test
@@ -80,7 +80,7 @@ class FilmorateApplicationTests {
 		FilmController filmController = new FilmController();
 		Film testFilm = new Film("Something Wild", "Something Wild is a 1986 American action comedy film ", LocalDate.parse("1893-11-17"), 90);
 		ValidationException ex = Assertions.assertThrows(ValidationException.class, () -> filmController.addFilm(testFilm));
-		Assertions.assertEquals("Invalid data", ex.getMessage());
+		Assertions.assertEquals("Ќеверные данные: слишком ранн€€ дата выпуска или отрицательна€ длинна", ex.getMessage());
 	}
 
 	@Test
@@ -88,7 +88,7 @@ class FilmorateApplicationTests {
 		FilmController filmController = new FilmController();
 		Film testFilm = new Film("Something Wild", "Something Wild is a 1986 American action comedy film ", LocalDate.parse("1993-11-17"), -1);
 		ValidationException ex = Assertions.assertThrows(ValidationException.class, () -> filmController.addFilm(testFilm));
-		Assertions.assertEquals("Invalid data", ex.getMessage());
+		Assertions.assertEquals("Ќеверные данные: слишком ранн€€ дата выпуска или отрицательна€ длинна", ex.getMessage());
 	}
 
 
