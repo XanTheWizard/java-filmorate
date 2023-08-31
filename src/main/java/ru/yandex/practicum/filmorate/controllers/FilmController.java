@@ -26,7 +26,7 @@ public class FilmController {
             film.setId(id);
             films.put(id, film);
         } else {
-            throw new ValidationException("Id фильма совпадает с имеющимся в базе");
+            throw new ValidationException("Film id already exists!");
         }
         return film;
     }
@@ -38,7 +38,7 @@ public class FilmController {
             films.put(film.getId(), film);
             return film;
         } else {
-            throw new ValidationException("Такой фильм ещё не был добавлен");
+            throw new ValidationException("There is no such film id");
         }
     }
 
@@ -49,7 +49,7 @@ public class FilmController {
 
     private void validateFilm(Film film) {
         if (film.getReleaseDate().isBefore(LocalDate.of(1895, Month.DECEMBER, 28)) || film.getDuration() <= 0) {
-            throw new ValidationException("Неверные данные: слишком ранняя дата выпуска или отрицательная длинна");
+            throw new ValidationException("Invalid film data");
 
         }
     }
