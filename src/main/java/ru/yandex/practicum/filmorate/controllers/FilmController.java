@@ -11,22 +11,22 @@ import java.time.Month;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @Slf4j
 public class FilmController {
-    private HashMap<Integer, Film> films = new HashMap<>();
-    private int id;
+    private Map<Integer, Film> films = new HashMap<>();
+    private int filmId;
 
     @PostMapping(value = "/films")
     public Film addFilm(@Valid @RequestBody Film film) {
         if (!films.containsKey(film.getId())) {
             validateFilm(film);
-            ++id;
-            film.setId(id);
-            films.put(id, film);
+            film.setId(++filmId);
+            films.put(film.getId(), film);
         } else {
-            throw new ValidationException("Film id already exists!");
+            throw new ValidationException("Film id = " + film.getId() + " already exists!");
         }
         return film;
     }
@@ -38,7 +38,7 @@ public class FilmController {
             films.put(film.getId(), film);
             return film;
         } else {
-            throw new ValidationException("There is no such film id");
+            throw new ValidationException("There is no such film id = " + film.getId());
         }
     }
 

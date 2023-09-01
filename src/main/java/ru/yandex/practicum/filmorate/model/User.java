@@ -9,23 +9,28 @@ import java.time.LocalDate;
 
 @Data
 public class User {
-    public User(@NonNull String email, @NonNull String login, String name, LocalDate birthday) {
+    @NotNull
+    @NotBlank
+    private String email;
+
+    @NotNull
+    @NotBlank
+    private String login;
+
+    private String name;
+
+    private LocalDate birthday;
+
+    private int id;
+    public User(String email, String login, String name, LocalDate birthday) {
         this.email = email;
         this.login = login;
         this.name = name;
         this.birthday = birthday;
     }
 
-    public User() {
+    private User() {
     }
 
-    private int id;
-    @NotNull
-    @NotBlank
-    @NotNull private String email;
-    @NotNull
-    @NotBlank
-    @NotNull private String login;
-    private String name;
-    private LocalDate birthday;
+
 }

@@ -10,22 +10,22 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @Slf4j
 public class UserController {
-    private HashMap<Integer, User> users = new HashMap<>();
-    private int id;
+    private Map<Integer, User> users = new HashMap<>();
+    private int userId;
 
     @PostMapping(value = "/users")
     public User addUser(@Valid @RequestBody User user) {
         if (!users.containsKey(user.getId())) {
             validateUser(user);
-            ++id;
-            user.setId(id);
-            users.put(id, user);
+            user.setId(++userId);
+            users.put(user.getId(), user);
         } else {
-            throw new ValidationException("User already exists!");
+            throw new ValidationException("User id = " + user.getId() + " already exists!");
         }
         return user;
     }
@@ -37,13 +37,13 @@ public class UserController {
             users.put(user.getId(), user);
             return user;
         } else {
-            throw new ValidationException("There is no user with this id");
+            throw new ValidationException("There is no user with this id = " + user.getId());
         }
     }
 
     @GetMapping("/users")
     public List<User> getUsers() {
-        return new ArrayList<User>(users.values());
+        return new ArrayList<>(users.values());
     }
 
     private void validateUser(User user) {
@@ -52,10 +52,6 @@ public class UserController {
         } else if (user.getName() == null) {
             user.setName(user.getLogin());
         }
-    }
-
-    public HashMap<Integer,User> getUsersMap() {
-        return new HashMap<>(users);
     }
 
 }
