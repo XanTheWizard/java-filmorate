@@ -28,6 +28,7 @@ public class Film {
     private int duration;
 
     private int rate;
+
     private Set<Integer> likes = new HashSet<>();
 
     public Film(String name, String description, LocalDate releaseDate, int duration) {

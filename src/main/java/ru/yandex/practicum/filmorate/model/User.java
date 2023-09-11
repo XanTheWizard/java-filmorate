@@ -23,6 +23,7 @@ public class User {
     private LocalDate birthday;
 
     private int id;
+
     public Set<Integer> friends = new HashSet<>();
 
     public User(String email, String login, String name, LocalDate birthday) {
