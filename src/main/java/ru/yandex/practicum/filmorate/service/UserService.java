@@ -61,6 +61,7 @@ public class UserService {
         getUserById(idUserOne).getFriends().remove(idUserTwo);
         getUserById(idUserTwo).getFriends().remove(idUserOne);
     }
+
     //list of users who are his friends
     public List<User> getListOfFriends(int idUserOne) {
         return setToList(getUserById(idUserOne).getFriends());
@@ -101,10 +102,8 @@ public class UserService {
         }
     }
 
-    private <T> Set<T> mergeSet(Set<T> a, Set<T> b)
-    {
-        return new HashSet<T>() {
-            {
+    private <T> Set<T> mergeSet(Set<T> a, Set<T> b) {
+        return new HashSet<T>() { {
                 addAll(a);
                 addAll(b);
             }
