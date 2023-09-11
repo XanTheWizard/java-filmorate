@@ -91,7 +91,7 @@ public class FilmService {
         throw new ResponseStatusException(HttpStatus.NOT_FOUND, "There is no such film! Movie id = " + id);
     }
 
-    private void validateFilm (Film film) {
+    private void validateFilm(Film film) {
         if (film.getReleaseDate().isBefore(LocalDate.of(1895, Month.DECEMBER, 28)) || film.getDuration() <= 0) {
             throw new ValidationException("Invalid film data!");
         }
