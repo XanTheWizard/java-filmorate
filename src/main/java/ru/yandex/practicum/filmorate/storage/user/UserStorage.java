@@ -8,7 +8,10 @@ public interface UserStorage {
     User addUser(User user);
 
     User updateUser(User user);
+
     User getUserById(int id);
+
     void deleteUser(int id);
+
     HashMap<Integer, User> getUsers();
 }
