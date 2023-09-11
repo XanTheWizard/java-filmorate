@@ -1,9 +1,11 @@
 package ru.yandex.practicum.filmorate.controllers;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
+import ru.yandex.practicum.filmorate.service.FilmService;
 
 import javax.validation.Valid;
 import java.time.LocalDate;
@@ -16,41 +18,50 @@ import java.util.Map;
 @RestController
 @Slf4j
 public class FilmController {
-    private Map<Integer, Film> films = new HashMap<>();
-    private int filmId;
+    private final FilmService filmService;
+    @Autowired
+    public FilmController(FilmService filmService) {
+        this.filmService = filmService;
+    }
+
 
     @PostMapping(value = "/films")
     public Film addFilm(@Valid @RequestBody Film film) {
-        if (!films.containsKey(film.getId())) {
-            validateFilm(film);
-            film.setId(++filmId);
-            films.put(film.getId(), film);
-        } else {
-            throw new ValidationException("Film id = " + film.getId() + " already exists!");
-        }
-        return film;
+        return filmService.addFilm(film);
     }
 
-    @PutMapping(value = "/films")
+    @PutMapping (value = "/films")
     public Film updateFilm(@Valid @RequestBody Film film) {
-        if (films.containsKey(film.getId())) {
-            validateFilm(film);
-            films.put(film.getId(), film);
-            return film;
-        } else {
-            throw new ValidationException("There is no such film id = " + film.getId());
-        }
+        return filmService.updateFilm(film);
     }
 
     @GetMapping("/films")
-    public List<Film> getFilms() {
-        return new ArrayList<>(films.values());
+    public List<Film> getFilmsList() {
+        return filmService.getFilmsList();
     }
 
-    private void validateFilm(Film film) {
-        if (film.getReleaseDate().isBefore(LocalDate.of(1895, Month.DECEMBER, 28)) || film.getDuration() <= 0) {
-            throw new ValidationException("Invalid film data");
+    @GetMapping("/films/{filmId}")
+    public Film findFilmById(@PathVariable int filmId) {
+        return filmService.getFilmById(filmId);
+    }
 
+    @PutMapping (value = "/films/{id}/like/{userId}")
+    public void like(@PathVariable int id, @PathVariable int userId) {
+        filmService.like(id, userId);
+    }
+
+    @DeleteMapping (value = "/films/{id}/like/{userId}")
+    public void unlike(@PathVariable int id, @PathVariable int userId) {
+        filmService.unlike(id, userId);
+    }
+
+    @GetMapping (value = "/films/popular")
+    public List<Film> getMoviesByLikes(@RequestParam(required = false) Integer count) {
+        if (count == null) {
+            return filmService.getMoviesByLikes(10);
+        } else {
+            return filmService.getMoviesByLikes(count);
         }
     }
+
 }
