@@ -13,6 +13,7 @@ import java.util.List;
 @Slf4j
 public class UserController {
     private final UserService userService;
+
     @Autowired
     public UserController(UserService userService) {
         this.userService = userService;
@@ -44,7 +45,7 @@ public class UserController {
     }
 
     @DeleteMapping(value = "/users/{id}/friends/{friendId}")
-    public void deleteFriend (@PathVariable int id, @PathVariable int friendId) {
+    public void deleteFriend(@PathVariable int id, @PathVariable int friendId) {
         userService.deleteFriend(id, friendId);
     }
 
