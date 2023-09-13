@@ -48,8 +48,9 @@ public class UserService {
 
     //Adding as a friend
     public void addFriend(int idUserOne, int idUserTwo) {
+        User friend = getUserById(idUserTwo);
         getUserById(idUserOne).getFriends().add(idUserTwo);
-        getUserById(idUserTwo).getFriends().add(idUserOne);
+        friend.getFriends().add(idUserOne);
     }
 
     //Unfriending
