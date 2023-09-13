@@ -3,6 +3,7 @@ package ru.yandex.practicum.filmorate.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import ru.yandex.practicum.filmorate.exception.BadRequestException;
 import ru.yandex.practicum.filmorate.exception.InternalErrorException;
 import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.model.ErrorResponse;
@@ -62,9 +63,15 @@ public class UserController {
     }
 
     @ExceptionHandler
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
     public ErrorResponse handle(final NotFoundException e) {
         return new ErrorResponse("Not found.");
+    }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorResponse handle(final BadRequestException e) {
+        return new ErrorResponse("Bad request.");
     }
 
     @ExceptionHandler
