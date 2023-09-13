@@ -1,14 +1,16 @@
 package ru.yandex.practicum.filmorate.storage.user;
 
 import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
+import org.springframework.stereotype.Component;
+import ru.yandex.practicum.filmorate.exception.InternalErrorException;
 import ru.yandex.practicum.filmorate.model.User;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
-@Service
+@Component
 public class InMemoryUserStorage implements UserStorage {
     private Map<Integer, User> users = new HashMap<>();
     private int userId;
@@ -18,7 +20,8 @@ public class InMemoryUserStorage implements UserStorage {
             user.setId(++userId);
             users.put(user.getId(), user);
         } else {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "User id = " + user.getId() + " already exists!");
+            //throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "User id = " + user.getId() + " already exists!");
+            throw new InternalErrorException(HttpStatus.INTERNAL_SERVER_ERROR, "User id = " + user.getId() + " already exists!");
         }
         return user;
     }
@@ -28,12 +31,13 @@ public class InMemoryUserStorage implements UserStorage {
             users.put(user.getId(), user);
             return user;
         } else {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "There is no user with this id = " + user.getId());
+            //throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "There is no user with this id = " + user.getId());
+            throw new InternalErrorException(HttpStatus.INTERNAL_SERVER_ERROR, "There is no user with this id = " + user.getId());
         }
     }
 
-    public HashMap<Integer, User> getUsers() {
-        return new HashMap<Integer, User>(users);
+    public List<User> getUsers() {
+        return new ArrayList<>(users.values());
     }
 
     public User getUserById(int id) {

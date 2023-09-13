@@ -1,8 +1,11 @@
 package ru.yandex.practicum.filmorate.controllers;
 
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import ru.yandex.practicum.filmorate.exception.InternalErrorException;
+import ru.yandex.practicum.filmorate.exception.NotFoundException;
+import ru.yandex.practicum.filmorate.model.ErrorResponse;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.service.UserService;
 
@@ -10,7 +13,6 @@ import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@Slf4j
 public class UserController {
     private final UserService userService;
 
@@ -58,5 +60,18 @@ public class UserController {
     public List<User> getListOfMutualFriends(@PathVariable int id, @PathVariable int otherId) {
         return userService.getListOfMutualFriends(id, otherId);
     }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorResponse handle(final NotFoundException e) {
+        return new ErrorResponse("Not found.");
+    }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public ErrorResponse handle(final InternalErrorException e) {
+        return new ErrorResponse("Internal server error.");
+    }
+
 
 }

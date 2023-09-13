@@ -3,11 +3,10 @@ package ru.yandex.practicum.filmorate.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
+import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
-import ru.yandex.practicum.filmorate.model.User;
-import ru.yandex.practicum.filmorate.storage.film.InMemoryFilmStorage;
+import ru.yandex.practicum.filmorate.storage.film.FilmStorage;
 
 import java.time.LocalDate;
 import java.time.Month;
@@ -18,51 +17,50 @@ import java.util.stream.Collectors;
 
 @Service
 public class FilmService {
-    public InMemoryFilmStorage inMemoryFilmStorage;
+    private FilmStorage filmStorage;
     public UserService userService;
 
     @Autowired
-    public FilmService(InMemoryFilmStorage inMemoryFilmStorage, UserService userService) {
-        this.inMemoryFilmStorage = inMemoryFilmStorage;
+    public FilmService(FilmStorage filmStorage, UserService userService) {
+        this.filmStorage = filmStorage;
         this.userService = userService;
     }
 
 
     public Film addFilm(Film film) { //Create new film
         validateFilm(film);
-        return inMemoryFilmStorage.addFilm(film);
+        return filmStorage.addFilm(film);
     }
 
     public Film updateFilm(Film film) { //Update an existing movie
         validateFilm(film);
-        return inMemoryFilmStorage.updateFilm(film);
+        return filmStorage.updateFilm(film);
     }
 
     public List<Film> getFilmsList() { //Generate a list of movies
-        List<Film> list = new ArrayList<Film>(inMemoryFilmStorage.getFilms().values());
-        return list;
+        return new ArrayList<>(filmStorage.getFilms());
     }
 
     public Film getFilmById(int id) { //Get a movie by its id
-        if (inMemoryFilmStorage.getFilmById(id) != null) {
-            return inMemoryFilmStorage.getFilmById(id);
+        Film film = filmStorage.getFilmById(id);
+        if (film != null) {
+            return film;
         } else {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "There is no such movie! Film id = " + id);
+            //throw new ResponseStatusException(HttpStatus.NOT_FOUND, "There is no such movie! Film id = " + id);
+            throw new NotFoundException(HttpStatus.NOT_FOUND, "There is no such movie! Film id = " + id);
         }
     }
 
 
     //user likes the movie
     public void like(int filmId, int userId) {
-        checkIfUserExists(userId);
-        checkIfFilmExists(filmId);
+        userService.getUserById(userId);
         getFilmById(filmId).getLikes().add(userId);
     }
 
     //user deletes like
     public void unlike(int filmId, int userId) {
-        checkIfUserExists(userId);
-        checkIfFilmExists(filmId);
+        userService.getUserById(userId);
         getFilmById(filmId).getLikes().remove(userId);
     }
 
@@ -75,20 +73,6 @@ public class FilmService {
         } else {
             return sortedList.stream().limit(count).collect(Collectors.toList());
         }
-    }
-
-    private void checkIfUserExists(int id) {
-        for (User currentUser : userService.getUsersList()) {
-            if (id == currentUser.getId()) return;
-        }
-        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "There is no such user! Id = " + id);
-    }
-
-    private void checkIfFilmExists(int id) {
-        for (Film currentFilm : getFilmsList()) {
-            if (id == currentFilm.getId()) return;
-        }
-        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "There is no such film! Movie id = " + id);
     }
 
     private void validateFilm(Film film) {
