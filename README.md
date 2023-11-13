@@ -1,7 +1,7 @@
 # Примеры запросов для основных операций
 ## Получаем 10 самых популярных фильмов
 ```	
-SELECT f.id, f.title, COUNT(l.like_id) AS like_count
+SELECT f.id, f.name, COUNT(l.like_id) AS like_count
 FROM films AS f
 LEFT JOIN likes AS l ON f.id = l.film_id
 GROUP BY f.id, f.title
