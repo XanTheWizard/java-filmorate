@@ -17,5 +17,7 @@ JOIN friendship AS f ON (u.id = f.user1_id OR u.id = f.user2_id)
 WHERE (f.user1_id = (id пользователя) OR f.user2_id = (id пользователя))
 AND f.status = true;
 ```
+![ER-диаграмма после внесения правок в результате p2p проверки с Игорем Миньковым .](https://i.ibb.co/TqRzSh8/dbase2.png)
+
 
 ![ER-диаграмма.](https://i.ibb.co/d74GNKQ/database.png)
